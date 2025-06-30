@@ -1,0 +1,20 @@
+
+
+.main-container {
+  width: 100vw;
+  height: 100vh;
+  background-color: red;
+  display: flex;
+}
+
+.left-side {
+  width: 50%;
+  height: 100%;
+  background-color: blue;
+}
+
+.right-side {
+  width: 50%;
+  height: 100%;
+  background-color: green;
+}
