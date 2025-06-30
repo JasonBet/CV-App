@@ -1,26 +1,24 @@
 //NavOptions.jsx
 
-function NavOptions () {
+function NavOptions ({activeOption, onSelect}) {
+    const optionIds = ["general", "experience", "education", "skills"];
 
     return (
-        <nav>
-            <ul>
-                <li>
-                    <button>General</button>
-                </li>
-                <li>
-                    <button>Experience</button>
-                </li>
-                <li>
-                    <button>Education</button>
-                </li>
-                <li>
-                    <button>Skills</button>
-                </li>
-            </ul>
-        </nav>
-
-    )
+    <nav>
+      <ul>
+        {optionIds.map((id) => (
+          <li key={id}>
+            <button
+              className={activeOption === id ? "active" : ""}
+              onClick={() => onSelect(id)}
+            >
+              {id[0].toUpperCase() + id.slice(1)}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
 
 }
 
