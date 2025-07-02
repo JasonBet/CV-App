@@ -1,48 +1,59 @@
 import { useState } from "react";
 
 export default function SkillsForm() {
-  const [category, setCategory] = useState("");
-  const [items, setItems] = useState("");
-  const [skills, setSkills] = useState([]);
+  const blank = { category: "", items: "" };
+  const [entries, setEntries] = useState([blank]);
 
-  function addSkill(e) {
+  const add = () => setEntries((s) => (s.length < 3 ? [...s, blank] : s));
+  const remove = (idx) => setEntries((s) => s.filter((_, i) => i !== idx));
+
+  const change = (idx, field, value) =>
+    setEntries((s) =>
+      s.map((item, i) => (i === idx ? { ...item, [field]: value } : item))
+    );
+
+  const save = (e) => {
     e.preventDefault();
-    if (!category.trim()) return;
-
-    setSkills((s) => [...s, { category, items }]);
-    setCategory("");
-    setItems("");
-  }
+    console.log("Skills:", entries);
+  };
 
   return (
-    <>
-      <form onSubmit={addSkill}>
-        <h2>Skills</h2>
+    <form onSubmit={save}>
+      <h2>Skills</h2>
 
-        <label>
-          Category
-          <input
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          />
-        </label>
+      {entries.map((sk, idx) => (
+        <fieldset key={idx}>
+          <legend>Category #{idx + 1}</legend>
 
-        <label>
-          Items (comma-separated)
-          <input value={items} onChange={(e) => setItems(e.target.value)} />
-        </label>
+          <label>
+            Category
+            <input
+              value={sk.category}
+              onChange={(e) => change(idx, "category", e.target.value)}
+            />
+          </label>
 
-        <button type="submit">Add</button>
-      </form>
+          <label>
+            Items (comma-separated)
+            <input
+              value={sk.items}
+              onChange={(e) => change(idx, "items", e.target.value)}
+            />
+          </label>
 
-      {/* quick preview */}
-      <ul>
-        {skills.map((s, idx) => (
-          <li key={idx}>
-            <strong>{s.category}:</strong> {s.items}
-          </li>
-        ))}
-      </ul>
-    </>
+          {entries.length > 1 && (
+            <button type="button" onClick={() => remove(idx)}>
+              Remove
+            </button>
+          )}
+        </fieldset>
+      ))}
+
+      <button type="button" onClick={add} disabled={entries.length === 3}>
+        Add Skill Category
+      </button>
+
+      <button type="submit">Save</button>
+    </form>
   );
 }
