@@ -1,10 +1,10 @@
 // RightSide.jsx --------------------------------------------
-import "./RightSide.css";  // your styles
+import "./RightSide.css";
 
-export default function RightSide({ data }) {
+export default function RightSide({ data, onPrint }) {
   const { general, experience, education, skills } = data;
+  const today = new Date().toISOString().slice(0, 10);
 
-  /* --- helper for date formatting ------------------------ */
   const fmtDate = (iso) => {
     if (!iso) return "";
     const d = new Date(iso);
@@ -13,24 +13,26 @@ export default function RightSide({ data }) {
       : d.toLocaleString("default", { month: "short", year: "numeric" });
   };
 
-  const today = new Date().toISOString().slice(0, 10);
-
-  /* --- compose General line ------------------------------ */
   const generalLine = Object.entries(general)
-    .filter(([k, v]) => k !== "name" && v.trim())
-    .map(([_, v]) => v.trim())
+    .filter(([k]) => k !== "name")
+    .map(([, v]) => v.trim())
+    .filter(Boolean)
     .join(" | ");
 
-  /* --- render -------------------------------------------- */
   return (
     <div className="right-side">
-      {/* -------- General ---------------------------------- */}
+      {/* ---------- print button --------------------------- */}
+      <button className="print-btn no-print" onClick={onPrint}>
+        Print / Save PDF
+      </button>
+
+      {/* ---------- General ------------------------------- */}
       <header>
         <h1>{general.name}</h1>
         <p>{generalLine}</p>
       </header>
 
-      {/* -------- Experience ------------------------------- */}
+      {/* ---------- Experience ---------------------------- */}
       <section>
         <h2 className="section-title">Experience</h2>
         <hr />
@@ -40,18 +42,28 @@ export default function RightSide({ data }) {
             <div className="left">
               <strong>{job.position}</strong>
               <div>{job.company}</div>
-              <p>{job.tasks}</p>
+              {/* bullet points */}
+              <ul>
+                {job.tasks
+                  .split("\n")
+                  .filter((t) => t.trim())
+                  .map((t, i) => (
+                    <li key={i}>{t}</li>
+                  ))}
+              </ul>
             </div>
 
             <div className="right">
               {fmtDate(job.from)} –{" "}
-              {job.until && job.until >= today ? "Present" : fmtDate(job.until)}
+              {job.until && job.until >= today
+                ? "Present"
+                : fmtDate(job.until)}
             </div>
           </div>
         ))}
       </section>
 
-      {/* -------- Education -------------------------------- */}
+      {/* ---------- Education ----------------------------- */}
       <section>
         <h2 className="section-title">Education</h2>
         <hr />
@@ -68,7 +80,7 @@ export default function RightSide({ data }) {
         ))}
       </section>
 
-      {/* -------- Skills ----------------------------------- */}
+      {/* ---------- Skills -------------------------------- */}
       <section>
         <h2 className="section-title">Skills</h2>
         <hr />

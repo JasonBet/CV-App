@@ -38,7 +38,7 @@ export default function ExperienceForm({ entries, onChange }) {
           </label>
 
           <label>
-            Responsibilities
+            Responsibilities (one per line)
             <textarea
               rows={3}
               value={job.tasks}

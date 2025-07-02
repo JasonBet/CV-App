@@ -1,42 +1,34 @@
-import { useState } from "react";
-
-export default function GeneralForm() {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-  });
-
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setForm((f) => ({ ...f, [name]: value }));
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    console.log("General details:", form);
-  }
+// forms/GeneralForm.jsx
+export default function GeneralForm({ value, onChange }) {
+  const update = (field, val) => onChange({ ...value, [field]: val });
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form>
       <h2>General</h2>
 
       <label>
         Name
-        <input name="name" value={form.name} onChange={handleChange} />
+        <input
+          value={value.name}
+          onChange={(e) => update("name", e.target.value)}
+        />
       </label>
 
       <label>
         Email
-        <input name="email" value={form.email} onChange={handleChange} />
+        <input
+          value={value.email}
+          onChange={(e) => update("email", e.target.value)}
+        />
       </label>
 
       <label>
         Phone
-        <input name="phone" value={form.phone} onChange={handleChange} />
+        <input
+          value={value.phone}
+          onChange={(e) => update("phone", e.target.value)}
+        />
       </label>
-
-      <button type="submit">Save</button>
     </form>
   );
 }
