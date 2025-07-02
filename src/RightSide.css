@@ -1,0 +1,36 @@
+
+/* RightSide.css ------------------------------------------- */
+.right-side {
+  padding: 2rem;
+  font-family: system-ui, sans-serif;
+}
+
+header h1 {
+  text-align: center;
+  margin: 0;
+}
+
+header p {
+  text-align: center;
+  margin: 0.25rem 0 1.5rem;
+}
+
+.section-title {
+  margin: 1.5rem 0 0.25rem;
+}
+
+.experience-item,
+.education-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.experience-item .left,
+.education-item .left {
+  max-width: 70%;
+}
+
+.right {
+  white-space: nowrap;
+}

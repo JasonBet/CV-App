@@ -1,18 +1,15 @@
-//LeftSide.jsx
-import { useState } from 'react'
-import NavOptions from "./NavOptions"
-import Editor from "./Editor"
+// LeftSide.jsx ---------------------------------------------
+import { useState } from "react";
+import NavOptions from "./NavOptions";
+import Editor from "./Editor";
 
+export default function LeftSide({ data, setters }) {
+  const [active, setActive] = useState("general");
 
-function LeftSide () {
-    const [activeOption, setActiveOption] = useState("general");
-
-    return (
-        <div className="left-side">
-            <NavOptions activeOption={activeOption} onSelect={setActiveOption}></NavOptions>
-            <Editor option={activeOption} className="editor"></Editor>
-        </div>
-    )
+  return (
+    <div className="left-side">
+      <NavOptions activeOption={active} onSelect={setActive} />
+      <Editor active={active} data={data} setters={setters} />
+    </div>
+  );
 }
-
-export default LeftSide

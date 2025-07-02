@@ -1,26 +1,44 @@
-//Editor.jsx
-import GeneralForm from "./GeneralForm";
-import ExperienceForm from "./ExperienceForm";
-import EducationForm from "./EducationForm";
-import SkillsForm from "./SkillsForm";
+// Editor.jsx ------------------------------------------------
+import GeneralForm from "./forms/GeneralForm";
+import ExperienceForm from "./forms/ExperienceForm";
+import EducationForm from "./forms/EducationForm";
+import SkillsForm from "./forms/SkillsForm";
 
-function Editor({ option }) {
-  switch (option) {
+export default function Editor({ active, data, setters }) {
+  switch (active) {
     case "general":
-      return <GeneralForm />;
+      return (
+        <GeneralForm
+          value={data.general}
+          onChange={setters.setGeneral}
+        />
+      );
 
     case "experience":
-      return <ExperienceForm />;
+      return (
+        <ExperienceForm
+          entries={data.experience}
+          onChange={setters.setExperience}
+        />
+      );
 
     case "education":
-      return <EducationForm />;
+      return (
+        <EducationForm
+          entries={data.education}
+          onChange={setters.setEducation}
+        />
+      );
 
     case "skills":
-      return <SkillsForm />;
+      return (
+        <SkillsForm
+          entries={data.skills}
+          onChange={setters.setSkills}
+        />
+      );
 
     default:
       return null;
   }
 }
-
-export default Editor;
