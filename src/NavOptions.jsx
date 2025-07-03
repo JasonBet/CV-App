@@ -4,7 +4,7 @@ function NavOptions ({activeOption, onSelect}) {
     const optionIds = ["general", "experience", "education", "skills"];
 
     return (
-    <nav>
+    <nav className="nav-options no-print">
       <ul>
         {optionIds.map((id) => (
           <li key={id}>

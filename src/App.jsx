@@ -6,78 +6,74 @@ import RightSide from "./RightSide";
 
 const STORAGE_KEY = "cv-builder-data";
 
-/* ----- default résumé (same as before) ------------------- */
-const todayISO = new Date().toISOString().slice(0, 10);
+/* helper used inside defaultData */
+const TODAY_ISO = new Date().toISOString().slice(0, 10);
 
-const defaultData = {
+/* ---------- default résumé data -------------------------- */
+const DEFAULT_DATA = {
   general: {
     name: "John Doe",
     email: "john.doe@example.com",
     phone: "555-555-5555",
   },
+
   experience: [
     {
       id: 1,
       company: "Dynamics LLC",
       position: "Software Engineer",
       tasks: "Developed and maintained web applications.",
-      from: "2025-01-1",
-      until: todayISO,
+      from: "2025-01-01",
+      until: TODAY_ISO,               // ← TODAY_ISO is *used* here
     },
   ],
+
   education: [
     {
       id: 1,
       school: "State University",
       title: "B.S. Computer Science",
-      date: "2025-06-1",
+      date: "2025-06-01",
     },
   ],
+
   skills: [
     { id: 1, category: "Cloud", items: "AWS, Azure, Lambda" },
   ],
 };
 
 export default function App() {
-  /* -------- state (one object for easier persistence) ----- */
-  const [data, setData] = useState(defaultData);
+  /* ---------- state -------------------------------------- */
+  const [data, setData] = useState(DEFAULT_DATA);
 
-  /* -------- on mount: read localStorage ------------------- */
+  /* ---------- load from localStorage --------------------- */
   useEffect(() => {
     try {
       const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
-      if (stored) setData({ ...defaultData, ...stored }); // merge for safety
+      if (stored) setData({ ...DEFAULT_DATA, ...stored }); // shallow merge
     } catch {
       /* ignore corrupt JSON */
     }
   }, []);
 
-  /* -------- on every change: save ------------------------ */
+  /* ---------- save on every change ----------------------- */
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }, [data]);
 
-  /* -------- helper setters for forms --------------------- */
+  /* ---------- setters passed to forms -------------------- */
   const setters = {
-    setGeneral: (g) => setData((d) => ({ ...d, general: g })),
+    setGeneral:    (g) => setData((d) => ({ ...d, general: g })),
     setExperience: (e) => setData((d) => ({ ...d, experience: e })),
-    setEducation: (e) => setData((d) => ({ ...d, education: e })),
-    setSkills: (s) => setData((d) => ({ ...d, skills: s })),
+    setEducation:  (e) => setData((d) => ({ ...d, education: e })),
+    setSkills:     (s) => setData((d) => ({ ...d, skills: s })),
   };
 
-  /* -------- render --------------------------------------- */
+  /* ---------- render ------------------------------------- */
   return (
     <div className="main-container">
-      <LeftSide
-        data={data}
-        setters={setters}
-      />
-
-      {/* Pass a print handler down so RightSide can trigger it */}
-      <RightSide
-        data={data}
-        onPrint={() => window.print()}
-      />
+      <LeftSide data={data} setters={setters} />
+      <RightSide data={data} /> {/* react-to-print handles its own print */}
     </div>
   );
 }
